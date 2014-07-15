@@ -1,0 +1,5 @@
+${color1}Status: ${color3}[--datatype=ST]
+${color1}Title: ${color3}[--datatype=TI]
+${color1}Artist: ${color3}[--datatype=AR]
+${color1}Album: ${color3}[--datatype=AL]
+${color1}Year: ${color3}[--datatype=YR] ${color1}Track: ${color3}[--datatype=TN]

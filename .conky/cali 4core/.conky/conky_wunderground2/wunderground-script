@@ -1,0 +1,151 @@
+#!/bin/bash
+
+#function: test_weather_message
+test_weather_message () {
+  if [[ $1 == "Chance of Flurries" || $1 == Flurries ]]; then
+      echo p
+    elif [[ $1 == "Chance of Rain" ]]; then
+      echo h
+	elif [[ $1 == "Chance of Freezing Rain" || $1 == "Light Freezing Rain" || $1 == "Freezing Rain" ]]; then
+      echo v
+	elif [[ $1 == "Chance of Sleet" || $1 == Sleet ]]; then
+      echo w
+	elif [[ $1 == "Chance of Snow" ]]; then
+      echo q 
+	elif [[ $1 ==  "Chance of Thunderstorms" || $1 == Thunderstorms || $1 == Thunderstorm ]]; then
+      echo n
+	elif [[ $1 ==  "Chance of a Thunderstorm" ]]; then
+      echo m
+	elif [[ $1 ==  Clear || $1 == Sunny ]]; then
+      echo a
+	elif [[ $1 ==  Cloudy ]]; then
+      echo d
+	elif [[ $1 ==  Fog || $1 == Haze ]]; then
+      echo 0
+	elif [[ $1 ==  "Mostly Cloudy" || $1 == "Partly Cloudy" || $1 == "Partly Sunny" ]]; then
+      echo c
+	elif [[ $1 ==  "Mostly Sunny" || $1 == "Scattered Clouds" ]]; then
+      echo b
+	elif [[ $1 ==  Rain ]]; then
+      echo i
+	elif [[ $1 ==  Snow ]]; then
+      echo r
+	elif [[ $1 ==  Overcast ]]; then
+      echo e
+    else echo -
+  fi	
+} 
+
+#function: test_weather_message_night
+test_weather_message_night () {
+  if [[ $1 == "Chance of Flurries" || $1 == Flurries || $1 == "Chance of Snow" || $1 ==  Snow ]]; then
+      echo O
+    elif [[ $1 == "Chance of Rain" || $1 == "Chance of Freezing Rain" || $1 == "Light Freezing Rain" || $1 == "Freezing Rain" || $1 == "Chance of Sleet" || $1 == Sleet || $1 ==  Rain ]]; then
+      echo G
+	elif [[ $1 ==  "Chance of Thunderstorms" || $1 == Thunderstorms || $1 == Thunderstorm ]]; then
+      echo K
+	elif [[ $1 ==  "Chance of a Thunderstorm" ]]; then
+      echo m
+	elif [[ $1 ==  Clear || $1 == Sunny ]]; then
+      echo A
+	elif [[ $1 ==  Cloudy ]]; then
+      echo D
+	elif [[ $1 ==  Fog || $1 == Haze ]]; then
+      echo 0
+	elif [[ $1 ==  "Mostly Cloudy" || $1 == "Partly Cloudy" || $1 == "Partly Sunny" ]]; then
+      echo C
+	elif [[ $1 ==  "Mostly Sunny" || $1 == "Scattered Clouds" ]]; then
+      echo B
+	elif [[ $1 ==  Overcast ]]; then
+      echo D
+    else echo -
+  fi	
+} 
+
+#function: test_wind_message
+test_wind_message () {
+  if [[ $1 == Sou ]]; then
+      echo 1
+    elif [[ $1 == SSW ]]; then
+      echo 2
+	elif [[ $1 == "SW " ]]; then
+      echo 3
+	elif [[ $1 == WSW || $1 == Sleet ]]; then
+      echo 4
+	elif [[ $1 == Wes ]]; then
+      echo 5 
+	elif [[ $1 ==  WNW ]]; then
+      echo 6
+	elif [[ $1 ==  "NW " ]]; then
+      echo 7
+	elif [[ $1 ==  NNW ]]; then
+      echo 8
+	elif [[ $1 ==  Nor ]]; then
+      echo 9
+	elif [[ $1 ==  NNE ]]; then
+      echo ":"
+	elif [[ $1 ==  "NE " ]]; then
+      echo ";"
+	elif [[ $1 ==  ENE ]]; then
+      echo "<"
+	elif [[ $1 ==  Eas ]]; then
+      echo "="
+	elif [[ $1 ==  ESE ]]; then
+      echo ">"
+	elif [[ $1 ==  "SE " ]]; then
+      echo "?"
+    elif [[ $1 ==  SSE ]]; then
+      echo "@"
+    else echo "-"
+  fi	
+} 
+
+
+wget -O $HOME/.conky/conky_wunderground2/ics http://ical.wunderground.com/auto/ical/global/stations/22550.ics?units=metric
+
+
+if [[ -s $HOME/.conky/conky_wunderground2/ics ]]; then
+
+	rm $HOME/.conky/conky_wunderground2/yes
+	rm $HOME/.conky/conky_wunderground2/weather_icons
+	egrep -i 'DESCRIPTION' $HOME/.conky/conky_wunderground2/ics > $HOME/.conky/conky_wunderground2/messages.wun
+	sed -i 's/\\n/\n/g' $HOME/.conky/conky_wunderground2/messages.wun
+	sed -i 's/DESCRIPTION://g' $HOME/.conky/conky_wunderground2/messages.wun
+	sed -i 's/ - /\n/g' $HOME/.conky/conky_wunderground2/messages.wun
+	sed -i 's/High/\nHigh/g' $HOME/.conky/conky_wunderground2/messages.wun
+	sed -i 's/Low/\nLow/g' $HOME/.conky/conky_wunderground2/messages.wun
+	sed -i 's/Wind /\n/g' $HOME/.conky/conky_wunderground2/messages.wun
+	sed -i 's/\..*//g' $HOME/.conky/conky_wunderground2/messages.wun
+	
+	for (( i=2; i<=100; i+=8 ))
+	  do
+	   test_line=$(sed -n "${i}p" $HOME/.conky/conky_wunderground2/messages.wun)
+	   if [[ $test_line == "" ]]; then
+	     break
+	   fi
+	   test_weather_message "$test_line" >> $HOME/.conky/conky_wunderground2/weather_icons
+	   j=$((i+2))
+	   test_line=$(sed -n "${j}p" $HOME/.conky/conky_wunderground2/messages.wun|cut -c1-3)
+	   if [[ $test_line == "" ]]; then
+	     break
+	   fi
+	   test_wind_message "$test_line" >> $HOME/.conky/conky_wunderground2/weather_icons
+	   j=$((i+4))
+	   test_line=$(sed -n "${j}p" $HOME/.conky/conky_wunderground2/messages.wun)
+	   if [[ $test_line == "" ]]; then
+	     break
+	   fi
+	   test_weather_message_night "$test_line" >> $HOME/.conky/conky_wunderground2/weather_icons
+	   j=$((i+6))
+	   test_line=$(sed -n "${j}p" $HOME/.conky/conky_wunderground2/messages.wun|cut -c1-3)
+	   if [[ $test_line == "" ]]; then
+	     break
+	   fi
+	   test_wind_message "$test_line" >> $HOME/.conky/conky_wunderground2/weather_icons
+	  done
+	days_no=$(($(cat $HOME/.conky/conky_wunderground2/weather_icons|wc -l)/4))
+	if [[ $days_no == 8 ]]; then
+	   touch $HOME/.conky/conky_wunderground2/yes
+	fi
+	
+fi

@@ -1,0 +1,1 @@
+${if_match ${execi 1 num=$(date +%-S);rem=$(( num % 2 ));if [ $rem -eq 0 ] ; then echo 0 ; else  echo 1 ; fi}==0}${image ~/.config/conky/conkyLEDbar/images/LEDbrightblue.png -p 92, 81 -n}${endif}

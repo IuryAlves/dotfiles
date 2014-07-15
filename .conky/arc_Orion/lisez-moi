@@ -1,0 +1,6 @@
+decompresser l'archive dans /.conky/arc_Orion/
+adapter le chemin dans le fichier orion.lua
+lancer avec start_arcorion
+attendez 20 secondes et le conky devrait apparaitre
+
+adaptez les emplacements dans les fichiers conkyrc_arc_orion, rings_orion et graphorion pour l'adapter à votre environnement de travail...

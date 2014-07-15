@@ -1,0 +1,5 @@
+#!/bin/bash
+conky -c ~/.conky/cai_simplicity/weather/.conkyrc &
+conky -c ~/.conky/cai_simplicity/calendar/.conkyrc &
+conky -c ~/.conky/cai_simplicity/.conkyrc &
+
