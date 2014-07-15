@@ -3,10 +3,7 @@
 # for examples
 
 # If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+[ -z "$PS1" ] && return
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -31,7 +28,7 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
@@ -88,7 +85,8 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-
+alias gpl='git pull'
+alias gpsh='git push'
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -105,101 +103,13 @@ fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
-  fi
 fi
-function gitbranch {     if git branch > /dev/null 2>&1; then         echo -e "$(git branch 2> /dev/null | grep '^*' | sed 's/^* //') ";     fi; }
 
+PATH="$PATH:/home/iury/bin/google_appengine"
+# put pygame-site on path
+PATH="$PATH:/home/iury/projects/pygame-site/FlaskApp/"
 
-PS1='\[\033[01;32m\]$(gitbranch)\[\033[01;35m\]\w\[\033[00m\]\n\$ '
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/iury/qmagico/google_appengine"
-export GAE_SDK="/home/iury/qmagico/google_appengine"
-
-alias qmagico="cd /home/iury/qmagico/aulasdovaca/"
-alias runserver="/home/iury/qmagico/aulasdovaca/ci/css.sh; dev_appserver.py --show_mail_body --datastore_path=dev.appstore src --blobstore_path=~/blob"
-alias projetos="cd /home/iury/projetos/"
-alias sublime="/home/iury/Downloads/Sublime/sublime_text"
-alias node="/usr/bin/nodejs"
-export PATH=$HOME/local/bin:$PATH
-alias qcurrbranch='git rev-parse --abbrev-ref HEAD'
-alias qsetup='git branch dev --set-upstream-to origin/dev \
-              && git branch master --set-upstream-to origin/master \
-              && git config branch.autosetuprebase always \
-              && git config branch.master.rebase true \
-              && git config branch.dev.rebase true \
-              && git config branch.$(qcurrbranch).rebase true'
-alias qpull='qsetup && git pull --rebase origin $(qcurrbranch)'
-alias qpush='qsetup && git push origin $(qcurrbranch) && echo nao se esqueca de fazer merge em dev =)'
-f_qmerge() {
-    if [ $1 ]
-    then
-        thatbranch=$1
-        thisbranch=$(qcurrbranch)
-        git merge --no-ff -m "Fazendo merge da $thatbranch em $thisbranch [$2]" $thatbranch
-    else
-        echo 'Faz merge de outra branch na branch atual'
-        echo '-----------------------------------------'
-        echo 'Usage: qmerge <other_branch> [commit_msg]'
-    fi
-}
-alias qmerge=f_qmerge
-f_qfeaturebranch() {
-    if [ $1 ]
-    then
-        newbranch=$1
-        git checkout -b $newbranch
-        qsetup
-    else
-        echo 'Cria uma feature branch a partir da branch atual'
-        echo '-----------------------------------------'
-        echo 'Usage: qfeaturebranch <new_branch>'
-    fi
-}
-alias qfeaturebranch=f_qfeaturebranch
-alias qcurrbranch='git rev-parse --abbrev-ref HEAD'
-f_qsetup() {
-    git branch master --quiet --set-upstream-to origin/master
-    git config branch.autosetuprebase always
-    git config branch.master.rebase true
-    git config branch.$(qcurrbranch).rebase true
-}
-alias qsetup=f_qsetup
-alias qpull='qsetup && git pull --rebase origin $(qcurrbranch)'
-alias qpush='qsetup && git push origin $(qcurrbranch)'
-f_qmerge() {
-    if [ $1 ]
-    then
-        thatbranch=$1
-        thisbranch=$(qcurrbranch)
-        git merge --no-ff -m "Fazendo merge da $thatbranch em $thisbranch [$2]" $thatbranch
-    else
-        echo 'Faz merge de outra branch na branch atual'
-        echo '-----------------------------------------'
-        echo 'Usage: qmerge <other_branch> [commit_msg]'
-    fi
-}
-alias qmerge=f_qmerge
-f_qfeaturebranch() {
-    if [ $1 ]
-    then
-        newbranch=$1
-        git checkout -b $newbranch
-        qsetup
-    else
-        echo 'Cria uma feature branch a partir da branch atual'
-        echo '-----------------------------------------'
-        echo 'Usage: qfeaturebranch <new_branch>'
-    fi
-}
-alias qfeaturebranch=f_qfeaturebranch
-alias qdiario="git log --author=<iury> --no-merges --since=yesterday --pretty=\"format: %s \" | tac"
-
-alias karma="/usr/lib/node_modules/karma/bin/karma"
-alias estante-comp="cd /home/iury/qmagico/estante-components/"
-alias estante="cd /home/iury/qmagico/estantemagica/"
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export GAE_SDK="/home/iury/bin/google_appengine"
+export FlaskApp="/home/iury/projects/pygame-site/FlaskApp"
