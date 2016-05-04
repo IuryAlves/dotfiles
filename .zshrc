@@ -1,7 +1,10 @@
-plugins=(git)
-# Path to your oh-my-zsh installation.
-export ZSH=/home/iury/.oh-my-zsh
 
+export WORKON_HOME=~/Envs
+source /usr/local/bin/virtualenvwrapper.sh
+source ~/.qdev.sh
+# Path to your oh-my-zsh installation.
+  export ZSH=/home/iury/.oh-my-zsh
+export DEFAULT_USER=iury
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -54,7 +57,7 @@ plugins=(git)
 
 # User configuration
 
-export PATH="/usr/local/rvm/gems/ruby-2.0.0-p353/bin:/usr/local/rvm/gems/ruby-2.0.0-p353@global/bin:/usr/local/rvm/rubies/ruby-2.0.0-p353/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/usr/local/rvm/bin:/home/iury/.local/bin:/home/iury/bin"
+  export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -83,4 +86,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias ll="ls -la"
+
+# clean pyc files in current dir
+alias clean_pyc="find $(dir) -name "*.pyc" -exec rm -rf {} \;"
+
+export PATH=$PATH:~/qmagico/sdks/google_appengine/
