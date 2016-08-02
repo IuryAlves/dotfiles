@@ -1,11 +1,7 @@
-
-export WORKON_HOME=~/Envs
-source /usr/local/bin/virtualenvwrapper.sh
-source ~/.qdev.sh
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/iury/.oh-my-zsh
-export DEFAULT_USER=iury
-# Set name of the theme to load.
+export ZSH=/Users/iuryalvesdesouza/.oh-my-zsh
+export USER=iury
+ #Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
@@ -35,6 +31,7 @@ ZSH_THEME="agnoster"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
+export DEFAULT_USERNAME="iury"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -57,7 +54,7 @@ plugins=(git)
 
 # User configuration
 
-  export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -87,7 +84,52 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# clean pyc files in current dir
-alias clean_pyc="find $(dir) -name "*.pyc" -exec rm -rf {} \;"
-
-export PATH=$PATH:~/qmagico/sdks/google_appengine/
+f_vd() {
+   cd ~/dev/vivadecora-v2
+   . dev.sh
+   source ~/dev/venvs/vd34/bin/activate
+   nvm use v5.8.0
+}
+alias vd=f_vd
+alias qcurrbranch='git rev-parse --abbrev-ref HEAD'
+f_qsetup() {
+    git branch master --quiet --set-upstream-to origin/master
+    git config branch.autosetuprebase always
+    git config branch.master.rebase true
+    git config branch.$(qcurrbranch).rebase true
+}
+alias qsetup=f_qsetup
+alias qpull='qsetup && git pull --rebase origin $(qcurrbranch)'
+alias qpush='qsetup && git push origin $(qcurrbranch)'
+f_qmerge() {
+    if [ $1 ]
+    then
+        thatbranch=$1
+        thisbranch=$(qcurrbranch)
+        git merge --no-ff -m "Fazendo merge da $thatbranch em $thisbranch [$2]" $thatbranch
+    else
+        echo 'Faz merge de outra branch na branch atual'
+        echo '-----------------------------------------'
+        echo 'Usage: qmerge <other_branch> [commit_msg]'
+    fi
+}
+alias qmerge=f_qmerge
+f_qfeaturebranch() {
+    if [ $1 ]
+    then
+        newbranch=$1
+        git checkout -b $newbranch
+        qsetup
+    else
+        echo 'Cria uma feature branch a partir da branch atual'
+        echo '-----------------------------------------'
+        echo 'Usage: qfeaturebranch <new_branch>'
+    fi
+}
+alias qfeaturebranch=f_qfeaturebranch
+alias birl=brew
+alias .=source
+export NVM_DIR=~/.nvm
+. $(brew --prefix nvm)/nvm.sh
+export WORKON_HOME=~/dev/venvs/
+source /usr/local/bin/virtualenvwrapper.sh
