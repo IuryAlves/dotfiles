@@ -1,10 +1,14 @@
-
 export WORKON_HOME=~/Envs
-source /usr/local/bin/virtualenvwrapper.sh
-source ~/.qdev.sh
+
+if [ ! -d "$WORKON_HOME" ]; then
+	mkdir  $WORKON_HOME
+fi
+
+source /usr/bin/virtualenvwrapper.sh
+
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/iury/.oh-my-zsh
-export DEFAULT_USER=iury
+  export ZSH=/home/yori/.oh-my-zsh
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -57,7 +61,7 @@ plugins=(git)
 
 # User configuration
 
-  export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+  export PATH="/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/yori/.local/bin:/home/yori/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -87,7 +91,18 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# clean pyc files in current dir
-alias clean_pyc="find $(dir) -name "*.pyc" -exec rm -rf {} \;"
+function mkgit() {
+	dir=$1
+	mkdir $dir
+	cd $dir
+	git init
+}
 
-export PATH=$PATH:~/qmagico/sdks/google_appengine/
+export GOOGLE=/home/yori/Downloads/google_appengine/
+export WEBAPP2=/home/yori/Downloads/google_appengine/lib/webapp2-2.3
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export PATH="$PATH:$GOOGLE"
+export PATH="$PATH:$WEBAPP2"
+export PYTHONPATH="$PYTHONPATH:$GOOGLE:$WEBAPP2"
+
+
