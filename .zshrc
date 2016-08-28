@@ -10,6 +10,10 @@ source /usr/bin/virtualenvwrapper.sh
   export ZSH=/home/yori/.oh-my-zsh
 
 # Set name of the theme to load.
+# Path to your oh-my-zsh installation.
+export ZSH=/Users/iuryalvesdesouza/.oh-my-zsh
+export USER=iury
+ #Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
@@ -39,6 +43,7 @@ ZSH_THEME="agnoster"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
+export DEFAULT_USERNAME="iury"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -61,7 +66,7 @@ plugins=(git)
 
 # User configuration
 
-  export PATH="/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/yori/.local/bin:/home/yori/bin"
+export PATH="/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/yori/.local/bin:/home/yori/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -106,3 +111,50 @@ export PATH="$PATH:$WEBAPP2"
 export PYTHONPATH="$PYTHONPATH:$GOOGLE:$WEBAPP2"
 
 
+f_vd() {
+   cd ~/dev/vivadecora-v2
+   . dev.sh
+   source ~/dev/venvs/vd34/bin/activate
+   nvm use v5.8.0
+}
+alias vd=f_vd
+alias qcurrbranch='git rev-parse --abbrev-ref HEAD'
+f_qsetup() {
+    git branch master --quiet --set-upstream-to origin/master
+    git config branch.autosetuprebase always
+    git config branch.master.rebase true
+    git config branch.$(qcurrbranch).rebase true
+}
+alias qsetup=f_qsetup
+alias qpull='qsetup && git pull --rebase origin $(qcurrbranch)'
+alias qpush='qsetup && git push origin $(qcurrbranch)'
+f_qmerge() {
+    if [ $1 ]
+    then
+        thatbranch=$1
+        thisbranch=$(qcurrbranch)
+        git merge --no-ff -m "Fazendo merge da $thatbranch em $thisbranch [$2]" $thatbranch
+    else
+        echo 'Faz merge de outra branch na branch atual'
+        echo '-----------------------------------------'
+        echo 'Usage: qmerge <other_branch> [commit_msg]'
+    fi
+}
+alias qmerge=f_qmerge
+f_qfeaturebranch() {
+    if [ $1 ]
+    then
+        newbranch=$1
+        git checkout -b $newbranch
+        qsetup
+    else
+        echo 'Cria uma feature branch a partir da branch atual'
+        echo '-----------------------------------------'
+        echo 'Usage: qfeaturebranch <new_branch>'
+    fi
+}
+alias qfeaturebranch=f_qfeaturebranch
+alias birl=brew
+alias .=source
+export NVM_DIR=~/.nvm
+. $(brew --prefix nvm)/nvm.sh
