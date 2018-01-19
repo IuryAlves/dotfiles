@@ -4,14 +4,14 @@ if [ ! -d "$WORKON_HOME" ]; then
 	mkdir  $WORKON_HOME
 fi
 
-source /usr/bin/virtualenvwrapper.sh
+source /usr/local/bin/virtualenvwrapper.sh
 
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/yori/.oh-my-zsh
+  export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load.
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/iuryalvesdesouza/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 export USER=iury
  #Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -103,18 +103,14 @@ function mkgit() {
 	git init
 }
 
-export GOOGLE=/home/yori/Downloads/google_appengine/
-export WEBAPP2=/home/yori/Downloads/google_appengine/lib/webapp2-2.3
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-export PATH="$PATH:$GOOGLE"
-export PATH="$PATH:$WEBAPP2"
 export PYTHONPATH="$PYTHONPATH:$GOOGLE:$WEBAPP2"
-
+export VAULT_PASS=$(cat ~/.vivadecora/password-vault)
 
 f_vd() {
-   cd ~/dev/vivadecora-v2
-   . dev.sh
-   source ~/dev/venvs/vd34/bin/activate
+   cd ~/dev/plataforma
+   source dev.sh
+   source $WORKON_HOME/vd34/bin/activate
    nvm use v5.8.0
 }
 alias vd=f_vd
