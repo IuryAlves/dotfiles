@@ -1,10 +1,9 @@
 export WORKON_HOME=~/Envs
+source $(which virtualenvwrapper.sh)
 
-if [ ! -d "$WORKON_HOME" ]; then
-	mkdir  $WORKON_HOME
+if [ ! -d "$WORKON_HOME/vd34" ]; then
+    mkvirtualenv vd34 --python=$(which python3)
 fi
-
-source /usr/local/bin/virtualenvwrapper.sh
 
 # Path to your oh-my-zsh installation.
   export ZSH=~/.oh-my-zsh
