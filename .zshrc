@@ -95,6 +95,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+function run_openvpn() {
+    sudo openvpn --config ~/client.ovpn --dev TUN
+}
+
 function mkgit() {
 	dir=$1
 	mkdir $dir
