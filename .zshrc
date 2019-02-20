@@ -1,28 +1,25 @@
-export WORKON_HOME=~/Envs
-source $(which virtualenvwrapper.sh)
-
-if [ ! -d "$WORKON_HOME/vd34" ]; then
-    mkvirtualenv vd34 --python=$(which python3)
-fi
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH=~/.oh-my-zsh
+export ZSH="/Users/iury.alves-de-souza/.oh-my-zsh"
 
-# Set name of the theme to load.
-# Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
-export USER=iury
- #Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="agnoster"
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="robbyrussell"
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
@@ -42,7 +39,6 @@ ZSH_THEME="agnoster"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
-export DEFAULT_USERNAME="iury"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -51,24 +47,27 @@ export DEFAULT_USERNAME="iury"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
+source $ZSH/oh-my-zsh.sh
+
 # User configuration
 
-export PATH="/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/yori/.local/bin:/home/yori/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
-
-source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -84,7 +83,7 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -93,67 +92,50 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 
-function run_openvpn() {
-    sudo openvpn --config ~/client.ovpn --dev TUN
+
+alias kct=kubectl
+alias ls="ls -lha"
+
+
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[blue]%}%})"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[blue]%}%})"
+ZSH_PROMPT_PREFIX="%{$fg_bold[blue]%}"
+ZSH_PROMPT_SUFFIX="%{$fg_bold[blue]%})%{$reset_color%}"
+ZSH_PROMPT_MAIN_INFO_START="%{$reset_color%}%{$fg_bold[red]%}"
+ZSH_PROMPT_MAIN_INFO_END="%{$reset_color%}"
+
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/klarna
+export AWS_DEFAULT_REGION=eu-west-1
+
+aws_login(){
+    eval `aws-adfs-tool login -r ${1} -a ${2}`
+}
+get_first_pod_name(){
+    kubectl get pods -n $1 -o json | jq '.items[0].metadata.name' --raw-output
 }
 
-function mkgit() {
-	dir=$1
-	mkdir $dir
-	cd $dir
-	git init
-}
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-export PYTHONPATH="$PYTHONPATH:$GOOGLE:$WEBAPP2"
-export VAULT_PASS=$(cat ~/.vivadecora/password-vault)
-
-f_vd() {
-   cd ~/dev/plataforma
-   source dev.sh
-   source $WORKON_HOME/vd34/bin/activate
-   nvm use v5.8.0
-}
-alias vd=f_vd
-alias qcurrbranch='git rev-parse --abbrev-ref HEAD'
-f_qsetup() {
-    git branch master --quiet --set-upstream-to origin/master
-    git config branch.autosetuprebase always
-    git config branch.master.rebase true
-    git config branch.$(qcurrbranch).rebase true
-}
-alias qsetup=f_qsetup
-alias qpull='qsetup && git pull --rebase origin $(qcurrbranch)'
-alias qpush='qsetup && git push origin $(qcurrbranch)'
-f_qmerge() {
-    if [ $1 ]
-    then
-        thatbranch=$1
-        thisbranch=$(qcurrbranch)
-        git merge --no-ff -m "Fazendo merge da $thatbranch em $thisbranch [$2]" $thatbranch
-    else
-        echo 'Faz merge de outra branch na branch atual'
-        echo '-----------------------------------------'
-        echo 'Usage: qmerge <other_branch> [commit_msg]'
+prompt_aws_profile(){
+    if [ -z ${AWS_PROFILE+x} ]; then
+        echo ""
+        return
     fi
+    echo "$ZSH_PROMPT_PREFIX adfs:($ZSH_PROMPT_MAIN_INFO_START$AWS_PROFILE$ZSH_PROMPT_MAIN_INFO_END$ZSH_PROMPT_SUFFIX"
 }
-alias qmerge=f_qmerge
-f_qfeaturebranch() {
-    if [ $1 ]
-    then
-        newbranch=$1
-        git checkout -b $newbranch
-        qsetup
-    else
-        echo 'Cria uma feature branch a partir da branch atual'
-        echo '-----------------------------------------'
-        echo 'Usage: qfeaturebranch <new_branch>'
-    fi
+
+kube_context(){
+    kubectl config current-context
 }
-alias qfeaturebranch=f_qfeaturebranch
-alias birl=brew
-alias .=source
-export NVM_DIR=~/.nvm
-. $(brew --prefix nvm)/nvm.sh
+
+
+prompt_kube_context(){
+    type kubectl >/dev/null 2>&1 || return
+    echo "$ZSH_PROMPT_PREFIX kube-context:($ZSH_PROMPT_MAIN_INFO_START$(kube_context)$ZSH_PROMPT_MAIN_INFO_END$ZSH_PROMPT_SUFFIX"
+}
+
+
+PS1=$PS1'$(prompt_aws_profile)$(prompt_kube_context) '
+
+
